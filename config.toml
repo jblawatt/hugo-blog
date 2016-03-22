@@ -1,0 +1,36 @@
+
+languageCode = "de-de"
+theme = "cocoa"
+baseurl = "http://www.blawatt.de/"
+
+author = "Jens Blawatt"
+title = "Jens Blawatt.de"
+pygmentsuseclasses = true
+builddrafts = true
+
+disqusShortname = "blawatt"
+googleAnalytics = "U1dAYHC-mS1AjNJ2dYrHnApNxvjQ1VB2f_3wz7AkzvE"
+
+[params]
+Author = "Jens Blawatt"
+Email = "jblawatt@googlemail.com"
+Twitter = "//twitter.com/jblawatt"
+DateForm = "Jan 2, 2006"
+DateFormFull = "Mon Jan 2 2006 15:04:05 MST"
+Lang = "de"
+CacheBuster = true
+GitHub = "//github.com/jblawatt"
+Bitbucket = "//bitbucket.org/jblawatt"
+Xing = "//www.xing.com/profile/Jens_Blawatt2"
+
+ExtraCssFiles = [
+    "//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css",
+    "//cdnjs.cloudflare.com/ajax/libs/prism/1.4.1/themes/prism.min.css",
+]
+
+ExtraJsFiles = [
+    
+]
+
+[blackfriday]
+extensions = ["fencedCodeBlocks", "tables", "footnotes"]
