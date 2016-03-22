@@ -32,6 +32,7 @@ ExtraCssFiles = [
 ExtraJsFiles = [
     "//cdnjs.cloudflare.com/ajax/libs/prism/1.4.1/prism.min.js",
     "//cdnjs.cloudflare.com/ajax/libs/prism/1.4.1/components/prism-bash.min.js",
+    "//cdnjs.cloudflare.com/ajax/libs/prism/1.4.1/components/prism-json.min.js",
     "//cdnjs.cloudflare.com/ajax/libs/prism/1.4.1/components/prism-vim.min.js",
     "//cdnjs.cloudflare.com/ajax/libs/prism/1.4.1/components/prism-yaml.min.js",
     "//cdnjs.cloudflare.com/ajax/libs/prism/1.4.1/components/prism-python.min.js",
