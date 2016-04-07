@@ -4,6 +4,7 @@ draft = false
 title = "Python Logging Decorator"
 author = "jblawatt"
 tags = ["python"]
+languages = ["python"]
 +++
 Hin und wieder ist es notwendig, die Parameter und die RÃ¼ckgabewerte
 einer Funktion zu Ã¼berprÃ¼fen. In Python kann man hierfÃ¼r das logging
@@ -74,7 +75,7 @@ und mit welchem Level die Meldungen ausgegeben werden sollen.
 
 Jetzt rufen wir die Funktion auf:
 
-```pycon
+``` python
     >>> log_warning('foo', bar='bar')
     [WARNING] calling method. name=<function log_warning at 0x2bf9320>; args=('foo',); kwargs={'bar': 'bar'};
     [WARNING] method called. name=<function log_warning at 0x2bf9320>; args=('foo',); kwargs={'bar': 'bar'}; return_value=('foo', 'bar')

@@ -2,6 +2,7 @@
 title = "Backbone.js - Nested Models"
 date = "2014-01-04"
 tags = ["javascript"]
+languages = ["javascript", "json"]
 +++
 
 Die Abbildung von Backbone Models auf Basis einer REST Schnittstelle ist
