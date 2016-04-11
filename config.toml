@@ -1,6 +1,6 @@
 
 languageCode = "de-de"
-theme = "cocoa"
+theme = "skeleton"
 baseurl = "http://www.blawatt.de/"
 
 author = "Jens Blawatt"
@@ -11,6 +11,16 @@ builddrafts = true
 disqusShortname = "blawatt"
 googleAnalytics = "U1dAYHC-mS1AjNJ2dYrHnApNxvjQ1VB2f_3wz7AkzvE"
 
+[[menu.main]]
+    name = "Blog"
+    url = "/blog/"
+[[menu.main]]
+    name = "Code"
+    url = "http://bitbucket.org/jblawatt"
+[[menu.main]]
+    name = "Über Mich"
+    url = "/about/"
+    
 [params]
 Author = "Jens Blawatt"
 Email = "jblawatt@googlemail.com"
@@ -25,7 +35,7 @@ Xing = "//www.xing.com/profile/Jens_Blawatt2"
 
 Copyright = "Copyright (c) 2016, Jens Blawatt; all rights reserved."
 
-PrismTheme = "coy"
+PrismTheme = "okaidia"
 
 ExtraCssFiles = [
     "//raw.githubusercontent.com/PrismJS/prism-themes/master/themes/prism-atom-dark.css"

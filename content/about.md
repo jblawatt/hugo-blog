@@ -7,12 +7,13 @@ title = "Über mich"
 
 An diese Stelle möchte ich mich kurz selbst vorstellen:
 
-![image](/images/jens-blawatt.jpg?width=300&height=300)
+![image](/images/jens-blawatt.jpg")
 
-Mein Name ist **Jens Blawatt**. Ich bin ein *Programmierer* bei der [GWS
+Mein Name ist **Jens Blawatt**. Ich bin ein *Softwareentwickler* und *-architekt* bei der [GWS
 mbH](http://www.gws.ms/). Ich arbeite dort an Onlineportalen und Webshop
-mit [Python](http://www.python.org) und
-[Django](http://www.djangoproject.com).
+mit [Python](http://www.python.org) und [Django](http://www.djangoproject.com).
+
+## Ausbildung
 
 Meine Ausbildung habe ich bei der [citeq](http://www.citeq.de), dem
 IT-Dienstleister der Stadt Münster, gemacht. Dort habe ich unter Anderem

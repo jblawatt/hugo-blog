@@ -2,6 +2,7 @@
 title = "MySQL Equivalent zu ORACLE's initcap"
 date = "2008-04-11"
 tags = ["mysql"]
+languages = ["sql"]
 +++
 
 Die Funktion **initcap** des *DBMS ORACLE* verwandelt jedes erste

@@ -2,6 +2,7 @@
 title = "Python Namespaces"
 tags = ["python"]
 date = "2013-01-12"
+languages = ["python"]
 +++
 
 In Programmiersprachen wie Java oder C\# ist es möglich, Namespaces zu

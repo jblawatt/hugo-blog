@@ -2,6 +2,7 @@
 title = "VIM als Python IDE"
 date = "2013-01-17"
 tags = ["vim"]
+languages = ["vim"]
 +++
 
 Es gibt einen Menge Anleitungen im Internet, wie man den Editor (G)Vim
