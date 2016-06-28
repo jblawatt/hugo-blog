@@ -10,7 +10,7 @@ ja relativ einfach. Problematisch wurde es aber bei mir, als ich
 versuchte ein Model zu laden, dessen Attribute ebenfalls wieder Models
 bzw. eine Collection enthielten.
 
-Lässt man die Daten direkt von Backbone parsen, erhält man ein Attribut,
+LÃ¤sst man die Daten direkt von Backbone parsen, erhält man ein Attribut,
 welches ein einfaches JavaScript Objekt oder ein Array aus diesen
 enthält. Wie ich dieses Problem gelöst haben, möchte ich euch in einem
 kleinen Beispiel erklären.
@@ -25,26 +25,26 @@ Test* hat keine Kinder.
 ``` json
     [
       {
-        "lastName": "Mustermann", 
-        "id": 1, 
-        "firstName": "Max", 
+        "lastName": "Mustermann",
+        "id": 1,
+        "firstName": "Max",
         "children": [
           {
-            "lastName": "Mustermann", 
-            "id": 2, 
+            "lastName": "Mustermann",
+            "id": 2,
             "firstName": "Malte"
-          }, 
+          },
           {
-            "lastName": "Mustermann", 
-            "id": 3, 
+            "lastName": "Mustermann",
+            "id": 3,
             "firstName": "Lena"
           }
         ]
-      }, 
+      },
       {
-        "lastName": "Test", 
-        "children": [], 
-        "id": 4, 
+        "lastName": "Test",
+        "children": [],
+        "id": 4,
         "fistName": "Theresa"
       }
     ]
@@ -73,7 +73,7 @@ PersonCollection, was aber unser Ziel ist:
 ``` javascript
     var pc = new PersonCollection();
     pc.fetch();
-    
+
     pc.at(0).get('children'); // Das erste Objekt laden und das Attribut children ansehen.
     // >> [Object ]
 ```
@@ -87,22 +87,22 @@ Aus diesem Grund muss die Methode parse der Person überschieben werden.
 ``` javascript
     var Person = window.Person = Backbone.Model.extend({
         parse: function (resp) {
-    
+
             // Hat der Response ein Attribute children.
             if (resp['children']) {
-    
+
                 // jeden Eintrag in children durchgehen und eine
                 // Person erstellen und das Objekt parsen lassen.
                 var children = _.map(resp['children'], function (child) {
                     return new Person(child, {parse: true});
                 });
-    
+
         // aus der Liste der Personen eine PersonCollection erstellen
         // und dem Response zuweisen.
                 resp['children'] = new PersonCollection(children);
             }
-    
-        // den überarbeiteten Resposen zurückgeben.
+
+        // den Ã¼berarbeiteten Resposen zurÃ¼ckgeben.
             return resp;
          }
     });
@@ -114,8 +114,7 @@ erziehlt:
 ``` javascript
     var pc = new PersonCollection();
     pc.fetch();
-    
-    pc.at(0).get('children'); // Das erste Objekt laden und das Attribut children ansehen.
-    // >>  {length: 2, models: Array[2], _byId: Object, constructor: function, url: "/api/data/"…}
-```
 
+    pc.at(0).get('children'); // Das erste Objekt laden und das Attribut children ansehen.
+    // >>  {length: 2, models: Array[2], _byId: Object, constructor: function, url: "/api/data/"â¦}
+```

@@ -16,11 +16,11 @@ googleAnalytics = "U1dAYHC-mS1AjNJ2dYrHnApNxvjQ1VB2f_3wz7AkzvE"
     url = "/blog/"
 [[menu.main]]
     name = "Code"
-    url = "http://bitbucket.org/jblawatt"
+    url = "/code/"
 [[menu.main]]
-    name = "Über Mich"
+    name = "About"
     url = "/about/"
-    
+
 [params]
 Author = "Jens Blawatt"
 Email = "jblawatt@googlemail.com"
@@ -35,7 +35,7 @@ Xing = "//www.xing.com/profile/Jens_Blawatt2"
 
 Copyright = "Copyright (c) 2016, Jens Blawatt; all rights reserved."
 
-PrismTheme = "okaidia"
+PrismTheme = "default"
 
 ExtraCssFiles = [
     "//raw.githubusercontent.com/PrismJS/prism-themes/master/themes/prism-atom-dark.css"
