@@ -5,6 +5,7 @@ title = "Python Logging Decorator"
 author = "jblawatt"
 tags = ["python"]
 languages = ["python"]
+lang = "de"
 +++
 Hin und wieder ist es notwendig, die Parameter und die RÃ¼ckgabewerte
 einer Funktion zu Ã¼berprÃ¼fen. In Python kann man hierfÃ¼r das logging
@@ -15,7 +16,7 @@ irgendwo ausgegeben werden. In diesem Fall auf der Konsole.
 
 ```python
     import logging
-    
+
     # Einen Logger mit dem Namen foo.bar erstellen.
     logger = logging.getLogger('foo.bar')
     # Den Log-Level DEBUG setzten.
@@ -27,15 +28,15 @@ Jetzt ertsellen wir den Decorator, z.B. in der Datei decorators.py.
 
 ```python
     import logging
-    
+
     # Einen default Logger festlegen, der verwendet wird, wenn
     # wenn beim Decorator kein Logger Ã¼bergeben wurde.
     _logger = logging.getLogger(__name__)
-    
-    
+
+
     def log(level=logging.DEBUG, logger=None):
         logger = logger or _logger
-    
+
         def inner(fnc):
             def wrapper(*args, **kwargs):
                 logger.log(
@@ -62,12 +63,12 @@ und mit welchem Level die Meldungen ausgegeben werden sollen.
 
 ``` python
     import decorators
-    
+
     @decorators.log(logger=logger, level=logging.WARN)
     def log_warning(foo, bar):
         return foo, bar
-    
-    
+
+
     @decorators.log(logger=logger, level=logging.DEBUG)
     def log_debug(foo, bar):
         return foo, bar
@@ -79,7 +80,7 @@ Jetzt rufen wir die Funktion auf:
     >>> log_warning('foo', bar='bar')
     [WARNING] calling method. name=<function log_warning at 0x2bf9320>; args=('foo',); kwargs={'bar': 'bar'};
     [WARNING] method called. name=<function log_warning at 0x2bf9320>; args=('foo',); kwargs={'bar': 'bar'}; return_value=('foo', 'bar')
-    
+
     >>> log_debug('foo', bar='bar')
     [DEBUG] calling method. name=<function log_warning at 0x2bf9320>; args=('foo',); kwargs={'bar': 'bar'};
     [DEBUG] method called. name=<function log_warning at 0x2bf9320>; args=('foo',); kwargs={'bar': 'bar'}; return_value=('foo', 'bar')
