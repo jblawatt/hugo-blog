@@ -6,7 +6,7 @@ baseurl = "/"
 author = "Jens Blawatt"
 title = "Jens Blawatt.de"
 pygmentsuseclasses = true
-builddrafts = true
+builddrafts = false
 
 disqusShortname = "blawatt"
 googleAnalytics = "U1dAYHC-mS1AjNJ2dYrHnApNxvjQ1VB2f_3wz7AkzvE"
