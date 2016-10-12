@@ -4,6 +4,7 @@ draft = false
 title = "Python Simple DI"
 description = "A simple python based dependecy injection container."
 languages = ["python"]
+href = "http://github.com/jblawatt/python-simple-di"
 +++
 
 

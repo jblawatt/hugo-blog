@@ -1,3 +1,5 @@
 public/
 *~
 Thumbs.db
+.idea
+.vscode

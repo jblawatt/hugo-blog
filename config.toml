@@ -1,7 +1,7 @@
 
 languageCode = "de-de"
 theme = "skeleton"
-baseurl = "/"
+baseurl = "http://"
 
 author = "Jens Blawatt"
 title = "Jens Blawatt.de"
@@ -15,8 +15,8 @@ googleAnalytics = "U1dAYHC-mS1AjNJ2dYrHnApNxvjQ1VB2f_3wz7AkzvE"
     name = "Blog"
     url = "/blog/"
 [[menu.main]]
-    name = "Code"
-    url = "/code/"
+    name = "Labs"
+    url = "/labs/"
 [[menu.main]]
     name = "About"
     url = "/about/"
