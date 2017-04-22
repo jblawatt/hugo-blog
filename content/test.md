@@ -9,6 +9,13 @@ title = "test"
 Dies ist also der Test um etwas mehr hier zu schreiben. Mal sehen wie gut das über GitHub funktioniert.
 
 
+```
+# Some Code Hiere
+print("hello world")
+class Foo:
+  pass
+```
+
 | | |
 |-----|-----|
 |`foobfoo`  | ***Object*** hello world blabl bla |
