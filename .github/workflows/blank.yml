@@ -10,8 +10,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Update and install 
-        run: |
-          apt update -y && apt install -y hugo git
-      - name: Run a multi-line script
-        run: hugo build
+
+
+	  - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "${GITHUB_CONTEXT}"
+
+
+	  - name: Load Hugo
+		run: |
+          wget https://github.com/gohugoio/hugo/releases/download/v0.87.0/hugo_0.87.0_Linux-64bit.tar.gz -O hugo.tar.gz
+          tar zxvf hugo.tar.gz
+          hugo build
+
+
+
+
+
