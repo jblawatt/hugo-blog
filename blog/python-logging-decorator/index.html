@@ -1,0 +1,59 @@
+<!doctype html><html lang=de><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1"><title>Jens Blawatt _ Blog</title><link rel=stylesheet href=/styles.css></head><body><main class="content container"><h4><a href=/>j3nko _ personal blog</a></h4><h1>Python Logging Decorator</h1><small><time datetime="2014-03-07 18:22:56 +0100 +0100">Friday, 7 March 2014</small></time><main><p>Hin und wieder ist es notwendig, die Parameter und die Rückgabewerte
+einer Funktion zu überprüfen. In Python kann man hierfür das logging
+Paket und den später folgenden Decorator für die Funktionen verwenden.</p><p>Zuvor müssen wir aber erstmal dafür sorgen, dass die Informationen
+irgendwo ausgegeben werden. In diesem Fall auf der Konsole.</p><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#000;font-weight:700>import</span> <span style=color:#555>logging</span>
+
+<span style=color:#998;font-style:italic># Einen Logger mit dem Namen foo.bar erstellen.</span>
+logger <span style=color:#000;font-weight:700>=</span> logging<span style=color:#000;font-weight:700>.</span>getLogger(<span style=color:#d14>&#39;foo.bar&#39;</span>)
+<span style=color:#998;font-style:italic># Den Log-Level DEBUG setzten.</span>
+logger<span style=color:#000;font-weight:700>.</span>setLevel(logging<span style=color:#000;font-weight:700>.</span>DEBUG)
+<span style=color:#998;font-style:italic># Festlegen, dass die Meldungen auf der Konsole ausgegeben werden sollen.</span>
+logger<span style=color:#000;font-weight:700>.</span>addHandler(logging<span style=color:#000;font-weight:700>.</span>StreamHandler())
+</code></pre></div><p>Jetzt ertsellen wir den Decorator, z.B. in der Datei decorators.py.</p><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#000;font-weight:700>import</span> <span style=color:#555>logging</span>
+
+<span style=color:#998;font-style:italic># Einen default Logger festlegen, der verwendet wird, wenn</span>
+<span style=color:#998;font-style:italic># wenn beim Decorator kein Logger übergeben wurde.</span>
+_logger <span style=color:#000;font-weight:700>=</span> logging<span style=color:#000;font-weight:700>.</span>getLogger(__name__)
+
+
+<span style=color:#000;font-weight:700>def</span> <span style=color:#900;font-weight:700>log</span>(level<span style=color:#000;font-weight:700>=</span>logging<span style=color:#000;font-weight:700>.</span>DEBUG, logger<span style=color:#000;font-weight:700>=</span><span style=color:#000;font-weight:700>None</span>):
+    logger <span style=color:#000;font-weight:700>=</span> logger <span style=color:#000;font-weight:700>or</span> _logger
+
+    <span style=color:#000;font-weight:700>def</span> <span style=color:#900;font-weight:700>inner</span>(fnc):
+        <span style=color:#000;font-weight:700>def</span> <span style=color:#900;font-weight:700>wrapper</span>(<span style=color:#000;font-weight:700>*</span>args, <span style=color:#000;font-weight:700>**</span>kwargs):
+            logger<span style=color:#000;font-weight:700>.</span>log(
+                level,
+                <span style=color:#d14>&#39;calling method. name=</span><span style=color:#d14>%s</span><span style=color:#d14>; args=</span><span style=color:#d14>%s</span><span style=color:#d14>; kwargs=</span><span style=color:#d14>%s</span><span style=color:#d14>;&#39;</span>,
+                fnc, args, kwargs
+            )
+            return_value <span style=color:#000;font-weight:700>=</span> fnc(<span style=color:#000;font-weight:700>*</span>args, <span style=color:#000;font-weight:700>**</span>kwargs)
+            logger<span style=color:#000;font-weight:700>.</span>log(
+                level,
+                <span style=color:#d14>&#39;method called. name=</span><span style=color:#d14>%s</span><span style=color:#d14>; args=</span><span style=color:#d14>%s</span><span style=color:#d14>; kwargs=</span><span style=color:#d14>%s</span><span style=color:#d14>; return_value=</span><span style=color:#d14>%s</span><span style=color:#d14>&#39;</span>,
+                fnc, args, kwargs, return_value
+            )
+            <span style=color:#000;font-weight:700>return</span> return_value
+        <span style=color:#000;font-weight:700>return</span> wrapper
+    <span style=color:#000;font-weight:700>return</span> inner
+</code></pre></div><p>Jetzt verwenden wir den Decorator. Hierfür erstellen wir zwei Methoden,
+denen wir die Parameter foo und bar übergeben. Zurückgegeben, wird ein
+Tuple dieser beiden Werte. Über die Methoden setzten wir unseren
+Decorator. Die Parameter des Decorators legen fest, in welchen Logger
+und mit welchem Level die Meldungen ausgegeben werden sollen.</p><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#000;font-weight:700>import</span> <span style=color:#555>decorators</span>
+
+<span style=color:#3c5d5d;font-weight:700>@decorators</span><span style=color:#000;font-weight:700>.</span>log(logger<span style=color:#000;font-weight:700>=</span>logger, level<span style=color:#000;font-weight:700>=</span>logging<span style=color:#000;font-weight:700>.</span>WARN)
+<span style=color:#000;font-weight:700>def</span> <span style=color:#900;font-weight:700>log_warning</span>(foo, bar):
+    <span style=color:#000;font-weight:700>return</span> foo, bar
+
+
+<span style=color:#3c5d5d;font-weight:700>@decorators</span><span style=color:#000;font-weight:700>.</span>log(logger<span style=color:#000;font-weight:700>=</span>logger, level<span style=color:#000;font-weight:700>=</span>logging<span style=color:#000;font-weight:700>.</span>DEBUG)
+<span style=color:#000;font-weight:700>def</span> <span style=color:#900;font-weight:700>log_debug</span>(foo, bar):
+    <span style=color:#000;font-weight:700>return</span> foo, bar
+</code></pre></div><p>Jetzt rufen wir die Funktion auf:</p><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#000;font-weight:700>&gt;&gt;&gt;</span> log_warning(<span style=color:#d14>&#39;foo&#39;</span>, bar<span style=color:#000;font-weight:700>=</span><span style=color:#d14>&#39;bar&#39;</span>)
+[WARNING] calling method<span style=color:#000;font-weight:700>.</span> name<span style=color:#000;font-weight:700>=&lt;</span>function log_warning at <span style=color:#099>0x2bf9320</span><span style=color:#000;font-weight:700>&gt;</span>; args<span style=color:#000;font-weight:700>=</span>(<span style=color:#d14>&#39;foo&#39;</span>,); kwargs<span style=color:#000;font-weight:700>=</span>{<span style=color:#d14>&#39;bar&#39;</span>: <span style=color:#d14>&#39;bar&#39;</span>};
+[WARNING] method called<span style=color:#000;font-weight:700>.</span> name<span style=color:#000;font-weight:700>=&lt;</span>function log_warning at <span style=color:#099>0x2bf9320</span><span style=color:#000;font-weight:700>&gt;</span>; args<span style=color:#000;font-weight:700>=</span>(<span style=color:#d14>&#39;foo&#39;</span>,); kwargs<span style=color:#000;font-weight:700>=</span>{<span style=color:#d14>&#39;bar&#39;</span>: <span style=color:#d14>&#39;bar&#39;</span>}; return_value<span style=color:#000;font-weight:700>=</span>(<span style=color:#d14>&#39;foo&#39;</span>, <span style=color:#d14>&#39;bar&#39;</span>)
+
+<span style=color:#000;font-weight:700>&gt;&gt;&gt;</span> log_debug(<span style=color:#d14>&#39;foo&#39;</span>, bar<span style=color:#000;font-weight:700>=</span><span style=color:#d14>&#39;bar&#39;</span>)
+[DEBUG] calling method<span style=color:#000;font-weight:700>.</span> name<span style=color:#000;font-weight:700>=&lt;</span>function log_warning at <span style=color:#099>0x2bf9320</span><span style=color:#000;font-weight:700>&gt;</span>; args<span style=color:#000;font-weight:700>=</span>(<span style=color:#d14>&#39;foo&#39;</span>,); kwargs<span style=color:#000;font-weight:700>=</span>{<span style=color:#d14>&#39;bar&#39;</span>: <span style=color:#d14>&#39;bar&#39;</span>};
+[DEBUG] method called<span style=color:#000;font-weight:700>.</span> name<span style=color:#000;font-weight:700>=&lt;</span>function log_warning at <span style=color:#099>0x2bf9320</span><span style=color:#000;font-weight:700>&gt;</span>; args<span style=color:#000;font-weight:700>=</span>(<span style=color:#d14>&#39;foo&#39;</span>,); kwargs<span style=color:#000;font-weight:700>=</span>{<span style=color:#d14>&#39;bar&#39;</span>: <span style=color:#d14>&#39;bar&#39;</span>}; return_value<span style=color:#000;font-weight:700>=</span>(<span style=color:#d14>&#39;foo&#39;</span>, <span style=color:#d14>&#39;bar&#39;</span>)
+</code></pre></div></main></main><footer><ul><li><a href=/about>About</a></li><li class=spacer>|</li><li><a href=//github.com/jblawatt>Github</a></li><li class=spacer>|</li><li><a href=/feed.atom>RSS</a></li></ul><div class=copyright>Copyright (c) 2021, Jens Blawatt; all rights reserved.</div></footer></body></html>

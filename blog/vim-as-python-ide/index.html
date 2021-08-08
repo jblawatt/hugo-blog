@@ -1,0 +1,84 @@
+<!doctype html><html lang=de><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1"><title>Jens Blawatt _ Blog</title><link rel=stylesheet href=/styles.css></head><body><main class="content container"><h4><a href=/>j3nko _ personal blog</a></h4><h1>VIM als Python IDE</h1><small><time datetime="2013-01-17 00:00:00 +0000 UTC">Thursday, 17 January 2013</small></time><main><p>Es gibt einen Menge Anleitungen im Internet, wie man den Editor (G)Vim
+in eine Entwicklungsumgebung werwandeln kann. Jetzt möchte ich mich in
+die Liste der Authoren einreihen und meine Beschreibung und Erfahrungen
+hier dokumentieren.</p><p>Ich weiß, dass es viele dieser Anleitungen im Internet git. Ich selbst
+habe eine Menge davon gelesen. Doch ich muss sagen, dass Ich wirklich
+einige davon lesen musste, dass ich alles wusste, was ich für mein
+(g)vim Setup brauchte. Deshalb möchte ich an dieser Stelle gerne noch
+meine eigene Anleitung veröffentlichen. Für alle, die es interessiert
+und als Erinnerung für mich ;-).</p><p><img src="/images/gvim-as-ide.png?width=800&height=800" alt=image></p><h2 id=vim-setup>Vim Setup</h2><p>Ich gehe davon aus, dass (g)vim bereits auf dem System installiert ist.
+Ist dies nicht der Fall, kann er unter <a href=http://www.vim.org>vim.org</a>
+heruntergeladen werden.</p><p>Ist (g)vim erfolgreich installiert, sollte es die Konfigurationsdatei
+.vimrc und den Ordner für die benutzerspezifische Konfiguration .vim im
+Home-Verzeichnis geben.</p><h3 id=vimrc>.vimrc</h3><p>In der .vimrc kann man einige Einstellungen festlegen, denen man sich
+die Arbeit mit vim erleichtern.</p><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-vim data-lang=vim><span style=color:#998;font-style:italic>	&#34; Automatisches Neu-Laden des .vimrc nach dem Speichern</span><span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span>	autocmd! bufwritepost .vimrc source %<span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span><span style=color:#998;font-style:italic>
+</span><span style=color:#998;font-style:italic>	&#34; Mit F2 den Paste-Mode umschalten</span><span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span>	set pastemode=&lt;F2&gt;<span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span><span style=color:#998;font-style:italic>
+</span><span style=color:#998;font-style:italic>	&#34; aktivieren des syntaxhighlighting</span><span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span>	<span style=color:#000;font-weight:700>if</span> has(<span style=color:#d14>&#39;syntax&#39;</span>)<span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span>    	syntax on<span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span>	<span style=color:#000;font-weight:700>endif</span><span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span><span style=color:#998;font-style:italic>
+</span><span style=color:#998;font-style:italic>	&#34; den leader key auf das , setzten</span><span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span>	<span style=color:#000;font-weight:700>let</span> mapleader=<span style=color:#d14>&#34;,&#34;</span><span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span><span style=color:#998;font-style:italic>
+</span><span style=color:#998;font-style:italic>	&#34; shortcuts für das ein- und ausrücken von markierten</span><span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span><span style=color:#998;font-style:italic>	&#34; textblöcken auf die größer und kleiner tasten mappen</span><span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span>	vnoremap &lt; &lt;gv<span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span>	vnoremap &gt; &gt;gv<span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span><span style=color:#998;font-style:italic>
+</span><span style=color:#998;font-style:italic>	&#34; markieren von unnötigen Leerzeichen (in rot)</span><span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span>	autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red<span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span>	au InsertLeave * match ExtraWhitespace <span style=color:#009926>/\s\+$/</span><span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span><span style=color:#998;font-style:italic>
+</span><span style=color:#998;font-style:italic>	&#34; festlegen des Farbschematas</span><span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span>	colors rdark<span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span>	filetype plugin indent on<span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span><span style=color:#998;font-style:italic>
+</span><span style=color:#998;font-style:italic>	&#34; Zeilennnummern anzeigen</span><span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span>	set number<span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span><span style=color:#998;font-style:italic>
+</span><span style=color:#998;font-style:italic>	&#34; die Breite des Dokuments auf 79 Zeichen setzten (z.B. für Python)</span><span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span>	set tw=<span style=color:#099>79</span><span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span><span style=color:#998;font-style:italic>
+</span><span style=color:#998;font-style:italic>	&#34; kein automatischer Zeilenumbruch beim Anwendungsstart</span><span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span>	set nowrap<span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span><span style=color:#998;font-style:italic>
+</span><span style=color:#998;font-style:italic>	&#34; nicht automatisch umbrechen set fo-=t</span><span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span><span style=color:#998;font-style:italic>
+</span><span style=color:#998;font-style:italic>	&#34; Erweiterungen für das Einrücken</span><span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span>	set tabstop=<span style=color:#099>4</span><span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span>	set softtabstop=<span style=color:#099>4</span><span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span>	set shiftwidth=<span style=color:#099>4</span><span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span>	set shiftround<span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span>	set expandtab<span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span><span style=color:#998;font-style:italic>
+</span><span style=color:#998;font-style:italic>	&#34; Anpassungen für die Suche</span><span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span>	set hlsearch<span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span>	set incsearch<span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span>	set ignorecase<span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span>	set smartcase<span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2>
+</span></code></pre></div><h2 id=plugins>Plugins</h2><p>(g)vim ist ein sehr felxibler, modularer Editor, für den des eine Menge
+Erweiterungen gibt. Zu finden sind diese u.a. unter
+<a href=http://www.vim.org>vim.org</a>.</p><p>Zwei Plugins, die ich von Anfang an verwendet habe, Pathogen und
+Powerline, möchte ich an dieser Stelle kurz vorstellen. Demnächst folgen
+dann noch weitere Reviews.</p><h3 id=pathogen>Pathogen</h3><p>Pathogen ist eine Plugin, mit dem es nicht mehr erforderlich ist die
+einzelnen Plugins, die man so installierne möchte, auf die vielen
+unterschiedlichen Ordner in .vim aufzuteilen. Dies ist besonders
+wichtig, wenn man ein Plugin wieder deinstallieren möchte.</p><p>Mit Pathogen erstellt man einen Ordner (autoload / bundle) in dem
+ordnersepariert die einzelnen Plugins abgelegt werden. Anschließend
+werden dann beim Start von vim die Plugins automatisch geladen.</p><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>	$ mkdir -p ~/.vim/autoload ~/.vim/bundle
+	$ curl -so ~/.vim/autoload/pathogen.vim https://raw.github.com/tpope/vim-pathogen/HEAD/autoload/pathogen.vim 
+</code></pre></div><p>Nun muss man das Plugin in der .vimrc aktivieren.</p><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-vim data-lang=vim>	call pathogen#infect()<span style=color:#a61717;background-color:#e3d2d2>
+</span></code></pre></div><p>Ab jetzt kann jedes Plugin einfach nach ~/.vim/bundle/PLUGIN_NAME/
+entpackt werden.</p><h3 id=powerline>powerline</h3><p>Die Powerline ist eine Erweiterung, die zusätzliche Informationen zur
+geöffneten Datei, dem Ornder, dem DVCS Branch, usw. anzeigt.</p><p>So sieht das Ergebnis dann aus:</p><p><img src=https://raw.github.com/Lokaltog/powerline/develop/docs/source/_static/img/pl-mode-normal.png alt=image></p><p><img src=https://raw.github.com/Lokaltog/powerline/develop/docs/source/_static/img/pl-mode-insert.png alt=image></p><p><img src=https://raw.github.com/Lokaltog/powerline/develop/docs/source/_static/img/pl-mode-replace.png alt=image></p><p><img src=https://raw.github.com/Lokaltog/powerline/develop/docs/source/_static/img/pl-mode-visual.png alt=image></p><p><em>(Quelle: <a href=https://github.com/Lokaltog/powerline>https://github.com/Lokaltog/powerline</a>)</em></p><p>Die alte vim-powerline ist obsolete. Die neue ist aktuell noch in der
+Beta-Phase. Funktioniert aber in meinen ersten Tests gut.</p><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>	$ <span style=color:#0086b3>cd</span> ~/.vim/bunde/
+	$ git clone https://github.com/Lokaltog/powerline.git
+</code></pre></div><p>Jetzt muss die Powerline noch in der .vimrc aktiviert werden.</p><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-vim data-lang=vim>	autocmd VimEnter,Colorscheme * :source ~<span style=color:#009926>/.vim/</span>bundle<span style=color:#009926>/powerline/</span>powerline<span style=color:#009926>/ext/</span>vim/source_plugin.vim<span style=color:#a61717;background-color:#e3d2d2>
+</span></code></pre></div><p>Das wars schon. ;-)</p></main></main><footer><ul><li><a href=/about>About</a></li><li class=spacer>|</li><li><a href=//github.com/jblawatt>Github</a></li><li class=spacer>|</li><li><a href=/feed.atom>RSS</a></li></ul><div class=copyright>Copyright (c) 2021, Jens Blawatt; all rights reserved.</div></footer></body></html>

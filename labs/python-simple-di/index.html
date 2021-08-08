@@ -1,0 +1,125 @@
+<!doctype html><html lang=de><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1"><title>Jens Blawatt _ Blog</title><link rel=stylesheet href=/styles.css></head><body><main class="content container"><p><a href=/>j3nko _ personal blog</a></p><h1>Python Simple DI</h1></time><main><p><img src=https://drone.io/bitbucket.org/jblawatt/python-simple-di/status.png alt=image>
+<img src=https://img.shields.io/pypi/v/python-simple-di.svg alt=image></p><p><em>python-simple-di</em> is a simple dependency injection container implementation. With its help you can create instances and its dependencies on runtime.</p><h2 id=changes>Changes</h2><h3 id=160>1.6.0</h3><ul><li><strong>resolve many</strong>: the new methods resolve_many and resolve_many_lazy gives you the possibility to resolve multiple objects depending on their class.</li><li><strong>alias names</strong>: you can provide a list of alias names within the object configuration.</li><li><strong>constructor/factory (kw)argument overridies</strong>: resolve methods noch accepts args and kwargs that will can be used instead of args configurations.</li><li><strong>register decorator</strong>: <code>register</code> can be used as decorator now.</li><li><strong>use as contextmanager</strong>: the container can be used as context manager to temporarily override settings in <code>with</code> block.</li></ul><h3 id=152>1.5.2</h3><ul><li>copy settings in DIContainer.__init__.</li></ul><h2 id=install>Install</h2><p>You can install it via pip: :</p><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>    pip install python-simple-di
+</code></pre></div><p>or via easy_install: :</p><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>    easy_install -U python-simple-di
+</code></pre></div><h2 id=configuration>Configuration</h2><p>To configure the <code>di.DIContainer</code> you need to pass a dict with the needed configuration in it. Alternativly you can use an instance of <code>di.DIConfig</code> which is used internal anyway. Define the objects name as <em>key</em> to access it at runtime. The <em>value</em> needs to be the configuration to create the instance.</p><ul><li><strong>type</strong> <em>(required)</em>: This option defines the type with its complete python dotted path or the python type instance. You can add a path that will dynamicly become added to the <code>sys.path</code> if the instance is requested. <em>Examples:</em></li></ul><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#d14>&#39;type&#39;</span>: <span style=color:#d14>&#39;path.to.my.Type&#39;</span>
+<span style=color:#d14>&#39;type&#39;</span>: path<span style=color:#000;font-weight:700>.</span>to<span style=color:#000;font-weight:700>.</span>my<span style=color:#000;font-weight:700>.</span>Type
+<span style=color:#998;font-style:italic># or</span>
+<span style=color:#d14>&#39;type&#39;</span>: <span style=color:#d14>&#39;/add/to/sys/path:add.to.sys.path.Type&#39;</span>
+</code></pre></div><ul><li><strong>args</strong> <em>(optional)</em>: The args can either be a <code>list</code> of values to pass as Arguments or a <code>dict</code> to pass as Keyword Arguments. To mix both, you can define a dictionary with an empty string or None as key and a list as value. <em>Examples:</em></li></ul><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#d14>&#39;args&#39;</span>: [<span style=color:#d14>&#39;first&#39;</span>, <span style=color:#099>3</span>, <span style=color:#d14>&#39;third&#39;</span>]
+<span style=color:#998;font-style:italic># or</span>
+<span style=color:#d14>&#39;args&#39;</span>: {<span style=color:#d14>&#39;one&#39;</span>: <span style=color:#d14>&#39;1&#39;</span>, <span style=color:#d14>&#39;two&#39;</span>:<span style=color:#d14>&#39;two&#39;</span>}
+<span style=color:#998;font-style:italic># or</span>
+<span style=color:#d14>&#39;args&#39;</span>: {<span style=color:#d14>&#39;&#39;</span>: [<span style=color:#099>1</span>, <span style=color:#d14>&#39;two&#39;</span>], <span style=color:#d14>&#39;three&#39;</span>: <span style=color:#099>3</span>}
+</code></pre></div><ul><li><strong>lazy</strong> <em>(optional)</em>: This option defines whether the instance will be created on runtime or on container initialization. <em>Example:</em></li></ul><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#d14>&#39;lazy&#39;</span>: <span style=color:#000;font-weight:700>False</span> <span style=color:#998;font-style:italic># default: True</span>
+</code></pre></div><ul><li><strong>singleton</strong> <em>(optional, default: True)</em>: If this option is set to <code>True</code>, the created instance will be saved inside the container. Next time the same instance will be returned. If this value is set to <code>False</code> a new instance will be created every time.</li><li><strong>properties</strong> <em>(optional)</em>: This option is similar to the <code>args</code> option. After an instance was created a buildup is called. This buildup fills the given properties with the given values in this dictionary. <em>Examples:</em></li></ul><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>{
+    <span style=color:#d14>&#39;type&#39;</span>: <span style=color:#d14>&#39;some.Person&#39;</span>,
+    <span style=color:#d14>&#39;propeties&#39;</span>: {
+        <span style=color:#d14>&#39;first_name&#39;</span>: <span style=color:#d14>&#39;John&#39;</span>,
+        <span style=color:#d14>&#39;last_name&#39;</span>: <span style=color:#d14>&#39;Doe&#39;</span>
+    }
+}
+</code></pre></div><ul><li><strong>assert_type</strong> <em>(optional)</em>: Checks weather the created type has the given base_type.</li></ul><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#d14>&#39;type&#39;</span>: <span style=color:#d14>&#39;path.to.implementet.Type&#39;</span>,
+<span style=color:#d14>&#39;assert_type&#39;</span>: <span style=color:#d14>&#39;path.to.parent.Type&#39;</span>
+</code></pre></div><ul><li><strong>factory_method</strong> <em>(optional)</em>: This options can be used to create an instance by a classmethod which creates the wanted instance. For example this can be used to create a class based views in django at runtime. <em>Example:</em></li></ul><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#d14>&#39;type&#39;</span>: <span style=color:#d14>&#39;myapp.views.ClassBasedView&#39;</span>,
+<span style=color:#d14>&#39;factory_method&#39;</span>: <span style=color:#d14>&#39;as_view&#39;</span>
+</code></pre></div><h3 id=argument-resolvers>Argument Resolvers</h3><p>With the help of the resolver the magic comes into play. Thanks to this small classes it is possible to trigger the dependencies of a type at runtime.</p><p>The following resolver be brought by the default package. Individual resolver can be implemented by extending the base class <code>di.Resolver</code>.</p><h4 id=referenceresolver>ReferenceResolver</h4><p>The ReferenceResolver offers the possibility to an attribute within the python path to refer. This must be the path and the object, as a Python dotted path.</p><p><em>Example:</em></p><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>{
+    <span style=color:#d14>&#39;args&#39;</span>: {
+        <span style=color:#d14>&#39;output_stream&#39;</span>: ReferenceResolver(<span style=color:#d14>&#39;sys.stdout&#39;</span>)
+    }
+}
+</code></pre></div><p>di also provides some shortcuts for this name:</p><ul><li><code>di.ref('sys.stdout')</code> as shortcut for type.</li><li><code>di.reference('sys.stdout')</code> as shortcut for the type.</li><li><code>'ref:sys.stdout'</code> as prefix of the configured type to lazy use the resolver.</li></ul><h4 id=relationresolver>RelationResolver</h4><p>The RelationResolver allows the resolution of an object of this container at runtime.</p><p><em>Example:</em></p><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>{
+    <span style=color:#d14>&#39;object_a&#39;</span>: {
+        <span style=color:#d14>&#39;type&#39;</span>: <span style=color:#d14>&#39;some.ClassName&#39;</span>
+    },
+    <span style=color:#d14>&#39;object_b&#39;</span>: {
+        <span style=color:#d14>&#39;type&#39;</span>: <span style=color:#d14>&#39;some.other.ClassName&#39;</span>,
+        <span style=color:#d14>&#39;args&#39;</span>: [
+            RelationResolver(<span style=color:#d14>&#39;object_a&#39;</span>)
+        ]
+    },
+}
+</code></pre></div><p>di also provides some shortcuts for this name:</p><ul><li><code>di.rel('object_a')</code> as shortcut for type.</li><li><code>di.relation('object_a')</code> as shortcut for the type.</li><li><code>'rel:object_a'</code> as prefix of the configured type to lazy use the resolver.</li></ul><h4 id=moduleresover>ModuleResover</h4><p>Sometimes it may be necessary to pass an entire module as a parameter. For this purpose the ModuleResolver available.</p><p><em>Example:</em></p><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>{
+    <span style=color:#d14>&#39;type&#39;</span>: <span style=color:#d14>&#39;some.ClassName&#39;</span>,
+    <span style=color:#d14>&#39;args&#39;</span>: {
+        <span style=color:#d14>&#39;serializer&#39;</span>: ModuleResolver(<span style=color:#d14>&#39;json&#39;</span>)
+    }
+}
+</code></pre></div><p>Di also provides some shortcuts for this name.</p><ul><li><code>di.mod('json')</code> as shortcut for type.</li><li><code>di.module('json')</code> as shortcut for the type.</li><li><code>'mod:json'</code> as prefix of the configured type to lazy use the resolver.</li></ul><h4 id=factoryresolver>FactoryResolver</h4><p>With the help of FactoryResolver the return value of a function as an argument can be passed to the specified type.</p><p><em>Example.</em></p><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>{
+    <span style=color:#d14>&#39;type&#39;</span>: <span style=color:#d14>&#39;some.ClassName&#39;</span>,
+    <span style=color:#d14>&#39;args&#39;</span>: [
+        FactoryResolver(<span style=color:#d14>&#39;path.to.the.factory_method&#39;</span>)
+    ]
+}
+</code></pre></div><p>Di also provides some shortcuts for this name.</p><ul><li><code>di.fac('path.to.the.factory_method')</code> as shortcut for type.</li><li><code>di.factory('path.to.the.factory_method')</code> as shortcut for the type.</li><li><code>'factory:path.to.the.factory_method'</code> as prefix of the configured type to lazy use the resolver.</li></ul><h4 id=attributeresolver>AttributeResolver</h4><p>With the Resolver an attribute of an instance can be passed as an argument. This can be very useful if you are using the django web framework and want to pass a settings value as an argument fo an instance.</p><p><em>Example:</em></p><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>{
+    <span style=color:#d14>&#39;type&#39;</span>: <span style=color:#d14>&#39;some.ClassName&#39;</span>:
+    <span style=color:#d14>&#39;args&#39;</span>: {
+        <span style=color:#d14>&#39;debug&#39;</span>: AttributeResolver(<span style=color:#d14>&#39;django.conf.settings.DEBUG&#39;</span>)
+    }
+}
+</code></pre></div><p>Di also provides some shortcuts for this name.</p><ul><li><code>di.attr('django.conf.settings.DEBUG')</code> as shortcut for type.</li><li><code>di.attribute('django.conf.settings.DEBUG')</code> as shortcut for the type.</li><li><code>'attr:django.conf.settings.DEBUG'</code> as prefix of the configured type to lazy use the resolver.</li></ul><h3 id=events>Events</h3><p>You can pass an EventDispatcher into the DiContainer. This Dispatcher will be called if anything interesting happens inside the Container. BaseType is <code>di.DIEventDispatcher</code>.</p><h4 id=usage>Usage</h4><p>Simply create a dictionary with your type configuration and pass it as settings argument to the <code>DIContainer</code>. The Dictionarys key is the type key to resolve the instance.</p><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#998;font-style:italic># create the container</span>
+container <span style=color:#000;font-weight:700>=</span> DIContainer(config)
+
+<span style=color:#998;font-style:italic># resolve the instance</span>
+instance <span style=color:#000;font-weight:700>=</span> container<span style=color:#000;font-weight:700>.</span>resolve(<span style=color:#d14>&#39;instance_key&#39;</span>)
+
+<span style=color:#998;font-style:italic># resolve the instance type only</span>
+type_of_instance_key <span style=color:#000;font-weight:700>=</span> container<span style=color:#000;font-weight:700>.</span>resolve_type(<span style=color:#d14>&#39;instance_key&#39;</span>)
+</code></pre></div><h3 id=resolve-lazy>Resolve Lazy</h3><p>Sometimes it may be necessary to create an instance at its first useage. So there are the following two messages, that returns a <code>di.Proxy</code> instance at first.</p><p>To use this Feature you need to provide a <code>proxy_type_name</code> and install the specific package for this. I recommend <code>lazy-object-proxy</code> with its type <code>Proxy</code>. Which is the default value for this argument. It is not shipped with this package because of the many different other implementations and thier different licence. If you use this in combination with django you can use <code>django.utils.functional.SimpleLazyObject</code>. <strong>But at this moment the <code>resolve_type_lazy</code> is not working properly with <code>SimpleLazyObject</code></strong>.</p><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#998;font-style:italic># create the container</span>
+container <span style=color:#000;font-weight:700>=</span> DIContainer(config, proxy_type_name<span style=color:#000;font-weight:700>=</span><span style=color:#d14>&#39;lazy_object_proxy.Proxy&#39;</span>)
+
+<span style=color:#998;font-style:italic># lazy resolves the instance</span>
+instance <span style=color:#000;font-weight:700>=</span> container<span style=color:#000;font-weight:700>.</span>resolve_lazy(<span style=color:#d14>&#39;instance_key&#39;</span>)
+
+<span style=color:#998;font-style:italic># lazy resolves the instance type only</span>
+type_of_instance_key <span style=color:#000;font-weight:700>=</span> container<span style=color:#000;font-weight:700>.</span>resolve_type_lazy(<span style=color:#d14>&#39;instance_key&#39;</span>)
+</code></pre></div><h3 id=child-container>Child Container</h3><p>If you need the same container but override some settings you can create a child container and pass the deviant settings into it.</p><p>This is the unittest that explains this function at its best.</p><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>container <span style=color:#000;font-weight:700>=</span> DIContainer({
+    <span style=color:#d14>&#39;one&#39;</span>: {
+        <span style=color:#d14>&#39;type&#39;</span>: <span style=color:#d14>&#39;mock.Mock&#39;</span>,
+        <span style=color:#d14>&#39;properties&#39;</span>: {
+            <span style=color:#d14>&#39;source&#39;</span>: <span style=color:#d14>&#39;parent&#39;</span>
+        }
+    },
+    <span style=color:#d14>&#39;two&#39;</span>: {
+        <span style=color:#d14>&#39;type&#39;</span>: <span style=color:#d14>&#39;mock.Mock&#39;</span>,
+        <span style=color:#d14>&#39;properties&#39;</span>: {
+            <span style=color:#d14>&#39;source&#39;</span>: <span style=color:#d14>&#39;parent&#39;</span>
+        }
+    }
+})
+
+<span style=color:#999>self</span><span style=color:#000;font-weight:700>.</span>assertEqual(container<span style=color:#000;font-weight:700>.</span>one<span style=color:#000;font-weight:700>.</span>source, <span style=color:#d14>&#39;parent&#39;</span>)
+<span style=color:#999>self</span><span style=color:#000;font-weight:700>.</span>assertEqual(container<span style=color:#000;font-weight:700>.</span>two<span style=color:#000;font-weight:700>.</span>source, <span style=color:#d14>&#39;parent&#39;</span>)
+
+child_container <span style=color:#000;font-weight:700>=</span> container<span style=color:#000;font-weight:700>.</span>create_child_container({
+    <span style=color:#d14>&#39;two&#39;</span>: {
+        <span style=color:#d14>&#39;type&#39;</span>: <span style=color:#d14>&#39;mock.Mock&#39;</span>,
+        <span style=color:#d14>&#39;properties&#39;</span>: {
+            <span style=color:#d14>&#39;source&#39;</span>: <span style=color:#d14>&#39;child&#39;</span>
+        }
+    }
+})
+
+<span style=color:#999>self</span><span style=color:#000;font-weight:700>.</span>assertEqual(child_container<span style=color:#000;font-weight:700>.</span>one<span style=color:#000;font-weight:700>.</span>source, <span style=color:#d14>&#39;parent&#39;</span>)
+<span style=color:#999>self</span><span style=color:#000;font-weight:700>.</span>assertEqual(child_container<span style=color:#000;font-weight:700>.</span>two<span style=color:#000;font-weight:700>.</span>source, <span style=color:#d14>&#39;child&#39;</span>)
+<span style=color:#999>self</span><span style=color:#000;font-weight:700>.</span>assertEqual(container<span style=color:#000;font-weight:700>.</span>one<span style=color:#000;font-weight:700>.</span>source, <span style=color:#d14>&#39;parent&#39;</span>)
+<span style=color:#999>self</span><span style=color:#000;font-weight:700>.</span>assertEqual(container<span style=color:#000;font-weight:700>.</span>two<span style=color:#000;font-weight:700>.</span>source, <span style=color:#d14>&#39;parent&#39;</span>)
+</code></pre></div><h3 id=decorators>Decorators</h3><p>Some method of the <code>di.DIContainer</code> can be used as decorator zu register or inject instances within your code.</p><h4 id=register-by-decorator>Register by decorator</h4><p>The method register can be used as decorator for classes or factory methods. With this you do not need to provide the instances configuration at container creation.</p><p>Passing the settings is optional.</p><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#3c5d5d;font-weight:700>@container</span><span style=color:#000;font-weight:700>.</span>register(<span style=color:#d14>&#34;my_service&#34;</span>, <span style=color:#0086b3>dict</span>(args<span style=color:#000;font-weight:700>=</span>{<span style=color:#d14>&#39;init_arg&#39;</span>: <span style=color:#d14>&#39;test&#39;</span>}))
+<span style=color:#000;font-weight:700>class</span> <span style=color:#458;font-weight:700>MyService</span>(<span style=color:#0086b3>object</span>):
+
+    <span style=color:#000;font-weight:700>def</span> __init__(<span style=color:#999>self</span>, init_arg):
+        <span style=color:#999>self</span><span style=color:#000;font-weight:700>.</span>init_arg <span style=color:#000;font-weight:700>=</span> init_arg
+
+    <span style=color:#000;font-weight:700>def</span> <span style=color:#900;font-weight:700>get_data</span>(<span style=color:#999>self</span>, args):
+        <span style=color:#000;font-weight:700>pass</span>
+</code></pre></div><h4 id=inject-with-decorator>Inject with decorator</h4><p>The method <code>inject</code> gives you the possibility to inject instances into a method if a keyword argument was not provided. that makes the loosely coupeling and testing very easy:</p><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#3c5d5d;font-weight:700>@container</span><span style=color:#000;font-weight:700>.</span>inject(service<span style=color:#000;font-weight:700>=</span><span style=color:#d14>&#39;some_service&#39;</span>)
+<span style=color:#000;font-weight:700>def</span> <span style=color:#900;font-weight:700>some_method</span>(value, service):
+    service<span style=color:#000;font-weight:700>.</span>do_work(value)
+
+some_method(<span style=color:#d14>&#34;hello world&#34;</span>)
+some_method(<span style=color:#d14>&#34;hello world&#34;</span>, ExplicitService())
+</code></pre></div><h4 id=inject-many-with-decorator>Inject many with decorator</h4><p>The method <code>inject_many</code> gives you the possibility to inject multiple instances depending on their type.</p><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#3c5d5d;font-weight:700>@container</span><span style=color:#000;font-weight:700>.</span>inject_many(hooks<span style=color:#000;font-weight:700>=</span>SomeHookClass)
+<span style=color:#000;font-weight:700>def</span> <span style=color:#900;font-weight:700>method</span>(data, hook_instances):
+    <span style=color:#000;font-weight:700>for</span> hook <span style=color:#000;font-weight:700>in</span> hook_instance:
+        hook<span style=color:#000;font-weight:700>.</span>hook(data)
+    <span style=color:#998;font-style:italic># ...</span>
+</code></pre></div></main></main><footer><ul><li><a href=/about>About</a></li><li class=spacer>|</li><li><a href=//github.com/jblawatt>Github</a></li><li class=spacer>|</li><li><a href=/feed.atom>RSS</a></li></ul><div class=copyright>Copyright (c) 2021, Jens Blawatt; all rights reserved.</div></footer></body></html>

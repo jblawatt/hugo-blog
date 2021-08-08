@@ -1,0 +1,31 @@
+<!doctype html><html lang=de><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1"><title>Jens Blawatt _ Blog</title><link rel=stylesheet href=/styles.css></head><body><main class="content container"><h4><a href=/>j3nko _ personal blog</a></h4><h1>Python Namespaces</h1><small><time datetime="2013-01-12 00:00:00 +0000 UTC">Saturday, 12 January 2013</small></time><main><p>In Programmiersprachen wie Java oder C# ist es möglich, Namespaces zu
+nutzen um sein Programm zu struckturieren. In Python nutzt man hierfür
+Packages. Auf den ersten Blick gibt es jedoch in Python keine
+Möglichkeit die einzelnen Packete in mehrere Eggs aufzuteilen und damit
+aussehen zu lassen als wären Sie eins. Dies dient meines Erachtens auch
+der Übersichtlichtkeit des Programms/Frameworks.</p><p>Da ich aus der C#/VB.NET Ecke komme, habe ich ich dieses Feature ein
+wenig vermisst.</p><p>Jetzt bin ich auf eine Möglichkeit gestoßen, dieses Feature auf in
+Python zu nutzen. Hierfür muss man in jeder __init__.py jedes
+Packetes folgenden Codeschnipsel einfügen.</p><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>	<span style=color:#000;font-weight:700>try</span>:
+	    <span style=color:#0086b3>__import__</span>(<span style=color:#d14>&#39;pkg_resources&#39;</span>)<span style=color:#000;font-weight:700>.</span>declare_namespace(__name__)
+	<span style=color:#000;font-weight:700>except</span> <span style=color:#900;font-weight:700>ImportError</span>:
+	    <span style=color:#000;font-weight:700>from</span> <span style=color:#555>pkgutil</span> <span style=color:#000;font-weight:700>import</span> extend_path
+	    __path__ <span style=color:#000;font-weight:700>=</span> extend_path(__path__, __name__)
+</code></pre></div><p>Als Beispiel habe ich jetzt zwei Packete: <em>one</em> und <em>two</em>. Beide
+enthalten die gleiche Strucktur, aber ein anderes Modul am Ende des
+Pfades.</p><p><strong>/one/foo/bar/foobar.py</strong></p><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>	<span style=color:#000;font-weight:700>def</span> <span style=color:#900;font-weight:700>my_method</span>():
+	    <span style=color:#0086b3>print</span> <span style=color:#d14>&#34;Hello From FooBar&#34;</span>
+</code></pre></div><p><strong>/two/foo/bar/barfoo.py</strong></p><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>	<span style=color:#000;font-weight:700>def</span> <span style=color:#900;font-weight:700>my_method</span>():
+    	<span style=color:#0086b3>print</span> <span style=color:#d14>&#34;Hello From BarFoo&#34;</span>
+</code></pre></div><p>Sorgt man jetzt dafür, dass beide Pfade im PYTHONPATH liegen, kann man
+diese so aufrufen, als wenn sie ein Packet wären.</p><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>	<span style=color:#000;font-weight:700>import</span> <span style=color:#555>sys</span>
+	
+	sys<span style=color:#000;font-weight:700>.</span>path<span style=color:#000;font-weight:700>.</span>append(<span style=color:#d14>&#39;./one/&#39;</span>)
+	sys<span style=color:#000;font-weight:700>.</span>path<span style=color:#000;font-weight:700>.</span>append(<span style=color:#d14>&#39;./two/&#39;</span>)
+	
+	<span style=color:#000;font-weight:700>from</span> <span style=color:#555>foo.bar</span> <span style=color:#000;font-weight:700>import</span> foobar, barfoo
+	
+	foobar<span style=color:#000;font-weight:700>.</span>my_method()
+	barfoo<span style=color:#000;font-weight:700>.</span>my_method()
+</code></pre></div><p>Den Quellcode zu diesem Beispiel habe ich auf Bitbucket veröffentlicht:
+<a href=http://bitbucket.org/jblawatt/python-namespace-example>http://bitbucket.org/jblawatt/python-namespace-example</a></p></main></main><footer><ul><li><a href=/about>About</a></li><li class=spacer>|</li><li><a href=//github.com/jblawatt>Github</a></li><li class=spacer>|</li><li><a href=/feed.atom>RSS</a></li></ul><div class=copyright>Copyright (c) 2021, Jens Blawatt; all rights reserved.</div></footer></body></html>

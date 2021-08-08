@@ -1,0 +1,77 @@
+<!doctype html><html lang=de><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1"><title>Jens Blawatt _ Blog</title><link rel=stylesheet href=/styles.css></head><body><main class="content container"><h4><a href=/>j3nko _ personal blog</a></h4><h1>Backbone.js - Nested Models</h1><small><time datetime="2014-01-04 00:00:00 +0000 UTC">Saturday, 4 January 2014</small></time><main><p>Die Abbildung von Backbone Models auf Basis einer REST Schnittstelle ist
+ja relativ einfach. Problematisch wurde es aber bei mir, als ich
+versuchte ein Model zu laden, dessen Attribute ebenfalls wieder Models
+bzw. eine Collection enthielten.</p><p>LÃ¤sst man die Daten direkt von Backbone parsen, erhält man ein Attribut,
+welches ein einfaches JavaScript Objekt oder ein Array aus diesen
+enthält. Wie ich dieses Problem gelöst haben, möchte ich euch in einem
+kleinen Beispiel erklären.</p><p><strong>Hier also zuerst die Ausgangslage:</strong></p><p>Die REST Schnittstelle liefert unter der Adresss /api/data/ folgende
+Daten. Abgebildet werden zwei Personen. <em>Max Mustermann</em> hat zusätzlich
+noch zwei Kinder, die im Attribut children enthalten sind. <em>Theresa
+Test</em> hat keine Kinder.</p><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>[
+  {
+    <span style=color:navy>&#34;lastName&#34;</span>: <span style=color:#d14>&#34;Mustermann&#34;</span>,
+    <span style=color:navy>&#34;id&#34;</span>: <span style=color:#099>1</span>,
+    <span style=color:navy>&#34;firstName&#34;</span>: <span style=color:#d14>&#34;Max&#34;</span>,
+    <span style=color:navy>&#34;children&#34;</span>: [
+      {
+        <span style=color:navy>&#34;lastName&#34;</span>: <span style=color:#d14>&#34;Mustermann&#34;</span>,
+        <span style=color:navy>&#34;id&#34;</span>: <span style=color:#099>2</span>,
+        <span style=color:navy>&#34;firstName&#34;</span>: <span style=color:#d14>&#34;Malte&#34;</span>
+      },
+      {
+        <span style=color:navy>&#34;lastName&#34;</span>: <span style=color:#d14>&#34;Mustermann&#34;</span>,
+        <span style=color:navy>&#34;id&#34;</span>: <span style=color:#099>3</span>,
+        <span style=color:navy>&#34;firstName&#34;</span>: <span style=color:#d14>&#34;Lena&#34;</span>
+      }
+    ]
+  },
+  {
+    <span style=color:navy>&#34;lastName&#34;</span>: <span style=color:#d14>&#34;Test&#34;</span>,
+    <span style=color:navy>&#34;children&#34;</span>: [],
+    <span style=color:navy>&#34;id&#34;</span>: <span style=color:#099>4</span>,
+    <span style=color:navy>&#34;fistName&#34;</span>: <span style=color:#d14>&#34;Theresa&#34;</span>
+  }
+]
+</code></pre></div><p>Zu erst erstellen wir jetzt unser Backbone Model für die Person. An
+dieser Stelle reicht uns erstmal die Minimalversion:</p><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-javascript data-lang=javascript><span style=color:#000;font-weight:700>var</span> Person <span style=color:#000;font-weight:700>=</span> Backbone.Model.extend({});
+</code></pre></div><p>Anschließend benötigen wir die Collection:</p><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-javascript data-lang=javascript><span style=color:#000;font-weight:700>var</span> PersonCollection <span style=color:#000;font-weight:700>=</span> Backbone.Collection.extend({
+    url<span style=color:#000;font-weight:700>:</span> <span style=color:#d14>&#39;/api/data/&#39;</span>,
+    model<span style=color:#000;font-weight:700>:</span> Person
+});
+</code></pre></div><p>Erstellen wir jetzt eine neue PersonCollection funktioniert das Laden
+der Daten für&rsquo;s erste. Nur enthält das Attribut children keine
+PersonCollection, was aber unser Ziel ist:</p><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-javascript data-lang=javascript><span style=color:#000;font-weight:700>var</span> pc <span style=color:#000;font-weight:700>=</span> <span style=color:#000;font-weight:700>new</span> PersonCollection();
+pc.fetch();
+
+pc.at(<span style=color:#099>0</span>).get(<span style=color:#d14>&#39;children&#39;</span>); <span style=color:#998;font-style:italic>// Das erste Objekt laden und das Attribut children ansehen.
+</span><span style=color:#998;font-style:italic>// &gt;&gt; [Object ]
+</span></code></pre></div><p>Um dafür zu sorgen, dass in dem Attribut chidlren eine PersonCollection
+landet, müssen wir selbst dafür sorgen, dass die Informationen auch als
+solche erkannt und verarbeitet werden.</p><p>Aus diesem Grund muss die Methode parse der Person überschieben werden.</p><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-javascript data-lang=javascript><span style=color:#000;font-weight:700>var</span> Person <span style=color:#000;font-weight:700>=</span> <span style=color:#0086b3>window</span>.Person <span style=color:#000;font-weight:700>=</span> Backbone.Model.extend({
+    parse<span style=color:#000;font-weight:700>:</span> <span style=color:#000;font-weight:700>function</span> (resp) {
+
+        <span style=color:#998;font-style:italic>// Hat der Response ein Attribute children.
+</span><span style=color:#998;font-style:italic></span>        <span style=color:#000;font-weight:700>if</span> (resp[<span style=color:#d14>&#39;children&#39;</span>]) {
+
+            <span style=color:#998;font-style:italic>// jeden Eintrag in children durchgehen und eine
+</span><span style=color:#998;font-style:italic></span>            <span style=color:#998;font-style:italic>// Person erstellen und das Objekt parsen lassen.
+</span><span style=color:#998;font-style:italic></span>            <span style=color:#000;font-weight:700>var</span> children <span style=color:#000;font-weight:700>=</span> <span style=color:#099>_</span>.map(resp[<span style=color:#d14>&#39;children&#39;</span>], <span style=color:#000;font-weight:700>function</span> (child) {
+                <span style=color:#000;font-weight:700>return</span> <span style=color:#000;font-weight:700>new</span> Person(child, {parse<span style=color:#000;font-weight:700>:</span> <span style=color:#000;font-weight:700>true</span>});
+            });
+
+    <span style=color:#998;font-style:italic>// aus der Liste der Personen eine PersonCollection erstellen
+</span><span style=color:#998;font-style:italic></span>    <span style=color:#998;font-style:italic>// und dem Response zuweisen.
+</span><span style=color:#998;font-style:italic></span>            resp[<span style=color:#d14>&#39;children&#39;</span>] <span style=color:#000;font-weight:700>=</span> <span style=color:#000;font-weight:700>new</span> PersonCollection(children);
+        }
+
+    <span style=color:#998;font-style:italic>// den Ã¼berarbeiteten Resposen zurÃ¼ckgeben.
+</span><span style=color:#998;font-style:italic></span>        <span style=color:#000;font-weight:700>return</span> resp;
+     }
+});
+</code></pre></div><p>Mit dieser Erweiterung der Methode haben wir das gewünschte Ergebnis
+erziehlt:</p><div class=highlight><pre style=background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-javascript data-lang=javascript><span style=color:#000;font-weight:700>var</span> pc <span style=color:#000;font-weight:700>=</span> <span style=color:#000;font-weight:700>new</span> PersonCollection();
+pc.fetch();
+
+pc.at(<span style=color:#099>0</span>).get(<span style=color:#d14>&#39;children&#39;</span>); <span style=color:#998;font-style:italic>// Das erste Objekt laden und das Attribut children ansehen.
+</span><span style=color:#998;font-style:italic>// &gt;&gt;  {length: 2, models: Array[2], _byId: Object, constructor: function, url: &#34;/api/data/&#34;â¦}
+</span></code></pre></div></main></main><footer><ul><li><a href=/about>About</a></li><li class=spacer>|</li><li><a href=//github.com/jblawatt>Github</a></li><li class=spacer>|</li><li><a href=/feed.atom>RSS</a></li></ul><div class=copyright>Copyright (c) 2021, Jens Blawatt; all rights reserved.</div></footer></body></html>
