@@ -12,14 +12,14 @@ jobs:
       - uses: actions/checkout@v2
 
 
-	  - name: Dump GitHub context
+      - name: Dump GitHub context
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: echo "${GITHUB_CONTEXT}"
 
 
-	  - name: Load Hugo
-		run: |
+      - name: Load Hugo
+        run: |
           wget https://github.com/gohugoio/hugo/releases/download/v0.87.0/hugo_0.87.0_Linux-64bit.tar.gz -O hugo.tar.gz
           tar zxvf hugo.tar.gz
           hugo build
