@@ -1,0 +1,27 @@
+{{ partial "header.html" . }}
+
+<header>
+    <h1>{{.Title | markdownify}}</h1>
+    <p>
+        {{.Description}}
+    </p>
+</header>
+
+<aside>
+  {{ partial "about.html" .}}
+</aside>
+
+{{ .Content }}
+
+<ul class='page-list'>
+  {{ $pages := .Pages.ByDate }}
+  {{ if .IsHome }}{{ $pages = .Site.RegularPages }}{{ end }}
+  {{ range (where $pages "Section" "==" "blog") }}
+  <li>
+    <a href="{{ .RelPermalink }}">{{ .Title | markdownify }}</a>
+    <small><time datetime="{{ .Date}}">{{ .Date.Format "2006-01-02" }}</time></small>
+  </li>
+  {{ end }}
+</ul>
+
+{{ partial "footer.html" . }}

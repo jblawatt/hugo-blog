@@ -1,0 +1,14 @@
+{{ partial "header.html" . }}
+
+<p>
+    <a href="/">j3nko _ personal blog</a>
+</p>
+<h1>{{ .Title | markdownify }}</h1>
+{{ if (gt .Params.date 0) }}
+</time>
+{{ end }}
+
+<main>
+{{ .Content }}
+</main>
+{{ partial "footer.html" . }}
