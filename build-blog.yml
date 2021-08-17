@@ -1,0 +1,17 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Hugo Build
+
+on:
+  push:
+    branches: [ new-release ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Update and install 
+        run: |
+          apt update -y && apt install -y hugo git
+      - name: Run a multi-line script
+        run: hugo build
