@@ -1,6 +1,6 @@
 {{ partial "header.html" . }}
 <h4>
-    <a href="/">j3nko _ personal blog</a>
+    <a href="/">{{ .Site.Title }}</a>
 </h4>
 <h1>{{ .Title | markdownify }}</h1>
 {{ if (gt .Params.date 0) }}

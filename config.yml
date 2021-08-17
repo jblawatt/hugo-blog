@@ -1,17 +1,15 @@
 baseURL: "https://blog.j3nk0.de/"
-languageCode: "de-de"
+defaultContentLanguage: "de"
 
 author: "Jens Blawatt"
-builddrafts: true
-title: "j3nk0 _ my personal blog"
+builddrafts: false
+title: "Jens Blawatt"
 description: "my personal blog"
-googleAnalytics: "U1dAYHC-mS1AjNJ2dYrHnApNxvjQ1VB2f_3wz7AkzvE"
 
 DateForm: "Jan 2, 2006"
 DateFormFull: "Mon Jan 2 2006 15:04:05 MST"
 CacheBuster: true
 GitHub: "//github.com/jblawatt"
-Copyright: "Copyright (c) 2016, Jens Blawatt; all rights reserved."
 
 
 staticDir:
