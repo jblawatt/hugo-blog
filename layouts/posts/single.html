@@ -1,0 +1,17 @@
+{{ partial "header.html" . }}
+<h4>
+    <a href="/">{{ .Site.Title }}</a>
+</h4>
+<h1>{{ .Title | markdownify }}</h1>
+{{ if (gt .Params.date 0) }}
+<small>
+    <time datetime="{{ .Date}}">{{ .Date.Format "Monday, 2 January 2006" }}
+</small>
+</time>
+{{ end }}
+
+<main>
+{{ .Content }}
+</main>
+
+{{ partial "footer.html" . }}

@@ -1,0 +1,21 @@
+baseURL: "https://blog.j3nk0.de/"
+defaultContentLanguage: "de"
+
+author: "Jens Blawatt"
+builddrafts: false
+title: "Jens Blawatt"
+description: "my personal blog"
+
+DateForm: "Jan 2, 2006"
+DateFormFull: "Mon Jan 2 2006 15:04:05 MST"
+CacheBuster: true
+GitHub: "//github.com/jblawatt"
+
+
+staticDir:
+  - static
+
+markup:
+  highlight:
+    anchroLineNos: true
+    style: github

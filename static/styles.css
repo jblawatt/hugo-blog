@@ -1,0 +1,159 @@
+@import url('https://fonts.googleapis.com/css2?familiy=PT+Serif&family=PT+Mono&family=PT+Sans+Caption:wght@400;700&family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+:root {
+    --font-main: "PT Sans", sans-serif;
+    --font-header: "PT Sans Caption", "PT Sans", sans-serif;
+    --font-mono: monospace;
+    --font-size: 18px;
+
+    --color-default: black;
+    --color-dim: silver;
+    --color-anchor: blue;
+    --color-dark: rgb(37, 37, 37);
+}
+
+html,
+body {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+    font: 18px/1.5 var(--font-main);
+    font-weight: 300;
+}
+
+small {
+    font-size: 0.8em;
+    color: var(--color-dim)
+}
+
+.container {
+    width: 650px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.content {
+    margin-top: 2em;
+    flex: 1 0 auto;
+}
+
+.content ul {
+    padding: 0;
+}
+
+.content ul li {
+    list-style: none;
+    padding-bottom: 0.3em;
+}
+
+h1,
+h2,
+h3,
+h4 {
+    line-height: 1.2;
+    font-family: var(--font-header);
+    font-weight: bold;
+    margin-top: 0.5em;
+    margin-bottom: 0.9em;
+}
+
+h1 {
+    font-size: calc(var(--font-size) * 1.5);
+}
+
+h2 {
+    font-size: 1.4em;
+}
+
+h3 {
+    font-size: 1.2em;
+}
+
+h4 {
+    font-size: 1.0em;
+}
+
+
+pre,
+code {
+    font-size: 0.9em;
+    font-family: var(--font-mono);
+}
+
+.highlight,
+pre {
+    margin: 1.5em 0 1.5em 0.5em;
+}
+
+
+h4>a,
+h4>a:visited,
+h4>a:hover {
+    text-decoration: none;
+    color: #444444;
+}
+
+a,
+a:visited,
+a:hover {
+    color: var(--color-anchor)
+}
+
+
+footer {
+    margin-top: 5em;
+    background-color: var(--color-dark);
+    color: white;
+    padding: 80px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+footer li {
+    display: inline;
+    list-style: none;
+}
+
+.copyright {
+    margin-top: 2em;
+    color: darkgrey;
+}
+
+footer a,
+footer a:visited {
+    color: white;
+    text-decoration: none;
+}
+
+footer a:hover {
+    color: darkgrey;
+}
+
+
+.about {
+    margin-top: 50px;
+    margin-bottom: 50px;
+    display: flex;
+    align-items: center;
+}
+
+
+.about .text {
+    padding: 20px;
+
+}
+
+
+.about img {
+    filter: grayscale(100%);
+    max-width: 200px;
+    text-align: center;
+    border-radius: 800px;
+}
+
+.about img:hover {
+    filter: grayscale(0%);
+}
