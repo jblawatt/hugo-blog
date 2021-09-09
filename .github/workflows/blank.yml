@@ -4,7 +4,7 @@ name: Hugo Build
 
 on:
   push:
-    branches: [ master]
+    branches: [master]
 jobs:
   build:
     runs-on: ubuntu-20.04
@@ -27,7 +27,6 @@ jobs:
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
-        if: ${{ github.ref == 'refs/heads/new-release' }}
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
