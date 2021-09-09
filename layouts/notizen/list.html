@@ -1,14 +1,15 @@
+
 {{ partial "header.html" . }}
 
 <main>
 
-  {{ partial "posts-intro.html" }}
+  {{ partial "notizen-intro.html" }}
 
   <div class="text">
     <ul class="page-list">
       {{ $pages := .Pages.ByDate }}
       {{ if .IsHome }}{{ $pages = .Site.RegularPages }}{{ end }}
-      {{ range (where $pages "Section" "==" "posts" ) }}
+      {{ range (where $pages "Section" "==" "notizen" ) }}
       <li>
         <a href="{{ .RelPermalink }}">{{ .Title | markdownify }}</a>
         <small><time datetime="{{ .Date}}">{{ .Date.Format "2006-01-02" }}</time></small>

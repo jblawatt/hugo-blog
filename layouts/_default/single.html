@@ -1,14 +1,23 @@
 {{ partial "header.html" . }}
 
-<p>
-    <a href="/">{{ .Site.Title }}</a>
-</p>
-<h1>{{ .Title | markdownify }}</h1>
-{{ if (gt .Params.date 0) }}
-</time>
-{{ end }}
+<main class="page">
 
-<main>
-{{ .Content }}
+    <h1>{{ .Title | markdownify }}</h1>
+    <p style="text-align: center;">
+        {{ if (gt .Params.date 0) }}
+        <time datetime="{{ .Date}}">{{ .Date.Format "Monday, 2 January 2006" }}
+        </time>
+        {{ end }}
+        <br>
+        {{ range (.GetTerms "tags") }}
+        <a href="{{ .Permalink }}">{{ .LinkTitle }}</a>
+        {{ end }}
+    </p>
+
+    <div class="text">
+        {{ .Content }}
+    </div>
+
 </main>
+
 {{ partial "footer.html" . }}
